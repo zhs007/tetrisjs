@@ -1,0 +1,34 @@
+{
+  "name": "tetris",
+  "version": "0.0.1",
+  "description": "tetris",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --progress --watch",
+    "serve": "webpack serve"
+  },
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "keywords": [
+    "tetris",
+    "pixi.js"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "devDependencies": {
+    "copy-webpack-plugin": "^11.0.0",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.0",
+    "webpack-dev-server": "^4.11.1"
+  },
+  "dependencies": {
+    "pixi.js": "^7.0.4"
+  }
+}
