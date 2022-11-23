@@ -27,11 +27,11 @@ export default class BoardRender extends PIXI.Container {
     }
 
     showShapeBlocks(lst) {
-        if(lst) {
-            for(let ii = 0; ii < lst.length; ++ii) {
+        if (lst) {
+            for (let ii = 0; ii < lst.length; ++ii) {
                 let node = lst[ii];
 
-                if(node.x >= 0 && node.x < this.iCols && node.y >= 0 && node.y < this.iRows) {
+                if (node.x >= 0 && node.x < this.iCols && node.y >= 0 && node.y < this.iRows) {
                     let sprite = this.lstBlockSprites[node.y][node.x];
                     sprite.visible = true;
                     sprite.texture = this.lstBlockTexture[node.bt - 1];
@@ -48,7 +48,7 @@ export default class BoardRender extends PIXI.Container {
                     let sprite = this.lstBlockSprites[ii][jj];
                     let block = board[ii][jj];
 
-                    if(block > 0) {
+                    if (block > 0) {
                         sprite.visible = true;
                         sprite.texture = this.lstBlockTexture[block - 1];
                     }

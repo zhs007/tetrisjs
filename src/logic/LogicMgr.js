@@ -25,15 +25,15 @@ export default class LogicMgr {
     }
 
     start() {
-        if(this.bGaming) {
-            return ;
+        if (this.bGaming) {
+            return;
         }
 
         this.clean();
 
         this.lstWaitShape = [];
 
-        for(let ii = 0; ii < CFG.LOGIC.WAIT_NUMS; ++ii) {
+        for (let ii = 0; ii < CFG.LOGIC.WAIT_NUMS; ++ii) {
             let shape = this._randomShape();
             this.lstWaitShape.push(shape);
         }
@@ -48,8 +48,8 @@ export default class LogicMgr {
     }
 
     left() {
-        if(!this.bGaming || this.curShape == null) {
-            return ;
+        if (!this.bGaming || this.curShape == null) {
+            return;
         }
 
         this.curShape.left();
@@ -57,8 +57,8 @@ export default class LogicMgr {
     }
 
     right() {
-        if(!this.bGaming || this.curShape == null) {
-            return ;
+        if (!this.bGaming || this.curShape == null) {
+            return;
         }
 
         this.curShape.right();
@@ -66,13 +66,13 @@ export default class LogicMgr {
     }
 
     drop() {
-        if(!this.bGaming || this.curShape == null) {
-            return ;
+        if (!this.bGaming || this.curShape == null) {
+            return;
         }
 
-        if(!this.curShape.fall()) {
+        if (!this.curShape.fall()) {
             // 不能下落则放置并判断是否失败
-            if(this.curShape.putBoard()) {
+            if (this.curShape.putBoard()) {
                 this.curShape = null;
                 this.bGaming = false;
             }
@@ -86,8 +86,8 @@ export default class LogicMgr {
     }
 
     rotate() {
-        if(!this.bGaming || this.curShape == null) {
-            return ;
+        if (!this.bGaming || this.curShape == null) {
+            return;
         }
 
         this.curShape.rotate();
@@ -103,18 +103,18 @@ export default class LogicMgr {
         }
     }
 
-    checkDestroy () {
+    checkDestroy() {
         for (let ii = 0; ii < this.iRows; ++ii) {
             let bfull = true;
 
             for (let jj = 0; jj < this.iCols; ++jj) {
-                if(this.lstBoard[ii][jj] == 0) {
-                    bfull =false;
+                if (this.lstBoard[ii][jj] == 0) {
+                    bfull = false;
                     break;
                 }
             }
 
-            if(bfull) {
+            if (bfull) {
                 this.lstBoard.splice(ii, 1);
 
                 let lst = [];
@@ -130,12 +130,12 @@ export default class LogicMgr {
 
         this.speed = CFG.LOGIC.MAX_SPEED - this.iLevel * CFG.LOGIC.CHG_SPEED;
 
-        if(this.speed < CFG.LOGIC.MIN_SPEED) {
+        if (this.speed < CFG.LOGIC.MIN_SPEED) {
             this.speed = CFG.LOGIC.MIN_SPEED;
         }
     }
 
-    nextBlock () {
+    nextBlock() {
         this.curShape = this.lstWaitShape[0];
         this.curShape.beginPosition();
 
@@ -145,13 +145,13 @@ export default class LogicMgr {
         this.lstWaitShape.push(shape);
     }
 
-    getData () {
+    getData() {
         let data = {};
 
         data.lst = null;
         data.board = this.lstBoard;
 
-        if(this.curShape) {
+        if (this.curShape) {
             data.lst = this.curShape.getBlocks();
         }
 
@@ -159,8 +159,8 @@ export default class LogicMgr {
         return data;
     }
 
-    getWaitBlocks (index) {
-        if(index < 0 || index >= this.lstWaitShape.length) {
+    getWaitBlocks(index) {
+        if (index < 0 || index >= this.lstWaitShape.length) {
             return null;
         }
 
@@ -170,13 +170,13 @@ export default class LogicMgr {
     }
 
     update(dms) {
-        if(!this.bGaming) {
-            return ;
+        if (!this.bGaming) {
+            return;
         }
 
         this.stime += dms;
 
-        if(this.stime > this.speed) {
+        if (this.stime > this.speed) {
             this.stime -= this.speed;
             this.drop();
         }

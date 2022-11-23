@@ -31,9 +31,9 @@ export default class LogicShape {
         // 如果一个块都不在绘制范围内，则尝试下移
         let lst = this.getBlocks();
 
-        while(!this._isInBoardList(lst)) {
+        while (!this._isInBoardList(lst)) {
             this.y += 1;
-            lst= this.getBlocks();
+            lst = this.getBlocks();
         }
     }
 
@@ -41,10 +41,10 @@ export default class LogicShape {
         let lst = this.getBlocks();
         let isend = false;
 
-        for(let ii = 0; ii < lst.length; ++ii) {
+        for (let ii = 0; ii < lst.length; ++ii) {
             let node = lst[ii];
 
-            if(this._isInBoard(node.x, node.y)) {
+            if (this._isInBoard(node.x, node.y)) {
                 this.lstBoard[node.y][node.x] = node.bt;
             }
             else {
@@ -59,15 +59,15 @@ export default class LogicShape {
         // 如果之后的位置有别的块或者超出区域则失败
         let lst = this.getBlocks_chgpos(0, 1);
 
-        for(let ii = 0; ii < lst.length; ++ii) {
+        for (let ii = 0; ii < lst.length; ++ii) {
             let node = lst[ii];
 
             // 超出范围
-            if(node.y >= this.iRows) {
+            if (node.y >= this.iRows) {
                 return false;
             }
 
-            if(this._hasBlock(node.x, node.y)) {
+            if (this._hasBlock(node.x, node.y)) {
                 return false;
             }
         }
@@ -80,15 +80,15 @@ export default class LogicShape {
         // 如果之后的位置有别的块或者超出区域则失败
         let lst = this.getBlocks_chgpos(-1, 0);
 
-        for(let ii = 0; ii < lst.length; ++ii) {
+        for (let ii = 0; ii < lst.length; ++ii) {
             let node = lst[ii];
 
             // 超出范围
-            if(node.x < 0) {
+            if (node.x < 0) {
                 return false;
             }
 
-            if(this._hasBlock(node.x, node.y)) {
+            if (this._hasBlock(node.x, node.y)) {
                 return false;
             }
         }
@@ -101,15 +101,15 @@ export default class LogicShape {
         // 如果之后的位置有别的块或者超出区域则失败
         let lst = this.getBlocks_chgpos(1, 0);
 
-        for(let ii = 0; ii < lst.length; ++ii) {
+        for (let ii = 0; ii < lst.length; ++ii) {
             let node = lst[ii];
 
             // 超出范围
-            if(node.x >= this.iCols) {
+            if (node.x >= this.iCols) {
                 return false;
             }
 
-            if(this._hasBlock(node.x, node.y)) {
+            if (this._hasBlock(node.x, node.y)) {
                 return false;
             }
         }
@@ -123,22 +123,22 @@ export default class LogicShape {
         let oy = this.y;
         let or = this.rtype;
 
-        let chgx  = 0;
+        let chgx = 0;
         // 先判断边缘
         let lst = this.getBlocks_rotate();
 
-        for(let ii = 0; ii < lst.length; ++ii) {
+        for (let ii = 0; ii < lst.length; ++ii) {
             let node = lst[ii];
 
             // 下面超出则不能旋转
-            if(node.y >= this.iRows) {
+            if (node.y >= this.iRows) {
                 return false;
             }
 
-            if(node.x < 0 && chgx > node.x) {
+            if (node.x < 0 && chgx > node.x) {
                 chgx = node.x;
             }
-            else if(node.x >= this.iCols && chgx < node.x - this.iCols + 1) {
+            else if (node.x >= this.iCols && chgx < node.x - this.iCols + 1) {
                 chgx = node.x - this.iCols + 1;
             }
         }
@@ -146,10 +146,10 @@ export default class LogicShape {
         chgx = -chgx;
 
         // 修正位置之后再判断碰撞
-        for(let ii = 0; ii < lst.length; ++ii) {
+        for (let ii = 0; ii < lst.length; ++ii) {
             let node = lst[ii];
 
-            if(this._hasBlock(node.x + chgx, node.y)) {
+            if (this._hasBlock(node.x + chgx, node.y)) {
                 return false;
             }
         }
@@ -160,16 +160,16 @@ export default class LogicShape {
     }
 
     getBlocks() {
-        return this._getBlocks(this.type, this.rtype, this.x, this. y);
+        return this._getBlocks(this.type, this.rtype, this.x, this.y);
     }
 
     getBlocks_chgpos(chgx, chgy) {
-        return this._getBlocks(this.type, this.rtype, this.x + chgx, this. y + chgy);
+        return this._getBlocks(this.type, this.rtype, this.x + chgx, this.y + chgy);
     }
 
     getBlocks_rotate() {
         let rtype = this._getNext(this.rtype);
-        return this._getBlocks(this.type, rtype, this.x, this. y);
+        return this._getBlocks(this.type, rtype, this.x, this.y);
     }
 
     _getBlocks(type, rtype, x, y) {
@@ -181,7 +181,7 @@ export default class LogicShape {
 
         for (let ii = 0; ii < rows; ++ii) {
             for (let jj = 0; jj < cols; ++jj) {
-                if(shape[ii][jj] != 0) {
+                if (shape[ii][jj] != 0) {
                     let node = { x: x + jj, y: y + ii, bt: shape[ii][jj] };
                     lst.push(node);
                 }
@@ -196,10 +196,10 @@ export default class LogicShape {
     }
 
     _isInBoardList(lst) {
-        for(let ii = 0; ii < lst.length; ++ii) {
+        for (let ii = 0; ii < lst.length; ++ii) {
             let node = lst[ii];
 
-            if(this._isInBoard(node.x, node.y)) {
+            if (this._isInBoard(node.x, node.y)) {
                 return true;
             }
         }
@@ -207,8 +207,8 @@ export default class LogicShape {
         return false;
     }
 
-    _hasBlock (x, y) {
-        if(!this._isInBoard(x ,y)) {
+    _hasBlock(x, y) {
+        if (!this._isInBoard(x, y)) {
             return false;
         }
 
@@ -218,7 +218,7 @@ export default class LogicShape {
     _getNext(rtype) {
         let nrt = rtype + 1;
 
-        if(nrt >= CFG.LOGIC.SHAPES[this.type].length) {
+        if (nrt >= CFG.LOGIC.SHAPES[this.type].length) {
             nrt = 0;
         }
 

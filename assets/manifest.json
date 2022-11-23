@@ -1,0 +1,8 @@
+{
+	"short_name": "tetris",
+  	"name": "tetris",
+    "start_url": "/tetris/dist/",
+    "scope": "/tetris/dist/",
+	"display": "fullscreen",
+	"orientation": "portrait"
+}
