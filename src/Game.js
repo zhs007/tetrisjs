@@ -1,4 +1,5 @@
 import { Assets, Sprite, Text, TextStyle, Container } from 'pixi.js';
+import { sound } from '@pixi/sound';
 
 import CFG from './Config';
 import BoardRender from './display/BoardRender';
@@ -78,6 +79,9 @@ export default class Game {
         }
 
         this.mgrLogic = new LogicMgr(CFG.LOGIC.COLS, CFG.LOGIC.ROWS);
+        this.mgrLogic.addEventListener((evt) => {
+            this.onLogicEvent(evt);
+        });
 
         this.app.ticker.add(this.update, this);
 
@@ -85,7 +89,7 @@ export default class Game {
             this.onKeyDown(evt.key);
         });
 
-        this.textInfo = new Text('Press SPACE to start\n↑ : Rotation\n↓ : Drop\n→ : Right\n← : Left', infoStyle);
+        this.textInfo = new Text('Press SPACE to start\n\n↑ : Rotation\n↓ : Drop\n→ : Right\n← : Left\nSPACE : Quick Drop', infoStyle);
         this.root.addChild(this.textInfo);
         this.textInfo.anchor.set(0.5);
         this.textInfo.position.x = CFG.DISPLAY.BG_WIDTH / 2;
@@ -102,6 +106,8 @@ export default class Game {
         this.textScore.anchor.set(1, 0);
         this.textScore.position.x = CFG.DISPLAY.BG_WIDTH;
         this.textScore.position.y = 30;
+
+        sound.add('my-sound', 'da.mp3');
     }
 
     onResize() {
@@ -125,6 +131,7 @@ export default class Game {
         if (this.mgrLogic.bRefresh) {
             let data = this.mgrLogic.getData();
             this.rendBoard.showBoardBlocks(data.board);
+            this.rendBoard.showShadowBlocks(data.shadow);
             this.rendBoard.showShapeBlocks(data.lst);
 
             for (let ii = 0; ii < CFG.LOGIC.WAIT_NUMS; ++ii) {
@@ -139,21 +146,49 @@ export default class Game {
     }
 
     onKeyDown(key) {
-        switch (key) {
-            case CFG.KEY.START:
+        if (!this.mgrLogic.bGaming) {
+            if (key == CFG.KEY.START) {
                 this.mgrLogic.start();
+            }
+        }
+        else {
+            let bsound = true;
+
+            switch (key) {
+                case CFG.KEY.QUICKDROP:
+                    this.mgrLogic.quickDrop();
+
+                    break;
+                case CFG.KEY.LEFT:
+                    this.mgrLogic.left();
+                    break;
+                case CFG.KEY.RIGHT:
+                    this.mgrLogic.right();
+                    break;
+                case CFG.KEY.DROP:
+                    this.mgrLogic.drop();
+                    break;
+                case CFG.KEY.ROTATE:
+                    this.mgrLogic.rotate();
+                    break;
+                default:
+                    bsound = false;
+                    break;
+            }
+
+            if (bsound) {
+                sound.play(CFG.SOUND.KEYDOWN);
+            }
+        }
+    }
+
+    onLogicEvent(evt) {
+        switch (evt) {
+            case 'destroy':
+                sound.play(CFG.SOUND.DESTROY);
                 break;
-            case CFG.KEY.LEFT:
-                this.mgrLogic.left();
-                break;
-            case CFG.KEY.RIGHT:
-                this.mgrLogic.right();
-                break;
-            case CFG.KEY.DROP:
-                this.mgrLogic.drop();
-                break;
-            case CFG.KEY.ROTATE:
-                this.mgrLogic.rotate();
+            case 'drop':
+                sound.play(CFG.SOUND.DROP);
                 break;
         }
     }

@@ -57,7 +57,7 @@ export default class LogicShape {
 
     fall() {
         // 如果之后的位置有别的块或者超出区域则失败
-        let lst = this.getBlocks_chgpos(0, 1);
+        let lst = this.getChgBlocks(0, 1);
 
         for (let ii = 0; ii < lst.length; ++ii) {
             let node = lst[ii];
@@ -76,9 +76,14 @@ export default class LogicShape {
         return true;
     }
 
+    quickFall() {
+        let bty = this._getBottomY();
+        this.y += bty;
+    }
+
     left() {
         // 如果之后的位置有别的块或者超出区域则失败
-        let lst = this.getBlocks_chgpos(-1, 0);
+        let lst = this.getChgBlocks(-1, 0);
 
         for (let ii = 0; ii < lst.length; ++ii) {
             let node = lst[ii];
@@ -99,7 +104,7 @@ export default class LogicShape {
 
     right() {
         // 如果之后的位置有别的块或者超出区域则失败
-        let lst = this.getBlocks_chgpos(1, 0);
+        let lst = this.getChgBlocks(1, 0);
 
         for (let ii = 0; ii < lst.length; ++ii) {
             let node = lst[ii];
@@ -125,7 +130,7 @@ export default class LogicShape {
 
         let chgx = 0;
         // 先判断边缘
-        let lst = this.getBlocks_rotate();
+        let lst = this.getRotateBlocks();
 
         for (let ii = 0; ii < lst.length; ++ii) {
             let node = lst[ii];
@@ -163,13 +168,53 @@ export default class LogicShape {
         return this._getBlocks(this.type, this.rtype, this.x, this.y);
     }
 
-    getBlocks_chgpos(chgx, chgy) {
+    getChgBlocks(chgx, chgy) {
         return this._getBlocks(this.type, this.rtype, this.x + chgx, this.y + chgy);
     }
 
-    getBlocks_rotate() {
+    getRotateBlocks() {
         let rtype = this._getNext(this.rtype);
         return this._getBlocks(this.type, rtype, this.x, this.y);
+    }
+
+    getShadowBlocks() {
+        let bty = this._getBottomY();
+        let lst = this.getChgBlocks(0, bty);
+
+        return lst;
+    }
+
+    _getBottomY() {
+        let lst = this.getBlocks();
+        let bty = 0;
+
+        let bn = true;
+
+        while (bn) {
+            for (let ii = 0; ii < lst.length; ++ii) {
+                let node = lst[ii];
+
+                // 超出范围
+                if (node.y + bty + 1 >= this.iRows) {
+                    bn = false;
+                    break;
+                }
+
+                if (this._hasBlock(node.x, node.y + bty + 1)) {
+                    bn = false;
+                    break;
+                }
+            }
+
+            if (bn) {
+                bty += 1;
+            }
+            else {
+                return bty;
+            }
+        }
+
+        return bty;
     }
 
     _getBlocks(type, rtype, x, y) {

@@ -26,6 +26,21 @@ export default class BoardRender extends PIXI.Container {
         }
     }
 
+    showShadowBlocks(lst) {
+        if (lst) {
+            for (let ii = 0; ii < lst.length; ++ii) {
+                let node = lst[ii];
+
+                if (node.x >= 0 && node.x < this.iCols && node.y >= 0 && node.y < this.iRows) {
+                    let sprite = this.lstBlockSprites[node.y][node.x];
+                    sprite.visible = true;
+                    sprite.texture = this.lstBlockTexture[node.bt - 1];
+                    sprite.alpha = 0.2;
+                }
+            }
+        }
+    }
+
     showShapeBlocks(lst) {
         if (lst) {
             for (let ii = 0; ii < lst.length; ++ii) {
@@ -35,6 +50,7 @@ export default class BoardRender extends PIXI.Container {
                     let sprite = this.lstBlockSprites[node.y][node.x];
                     sprite.visible = true;
                     sprite.texture = this.lstBlockTexture[node.bt - 1];
+                    sprite.alpha = 1;
                 }
             }
         }
@@ -55,6 +71,8 @@ export default class BoardRender extends PIXI.Container {
                     else {
                         sprite.visible = false;
                     }
+
+                    sprite.alpha = 1;
                 }
             }
         }
@@ -66,6 +84,7 @@ export default class BoardRender extends PIXI.Container {
             for (let jj = 0; jj < this.iCols; ++jj) {
                 let sprite = this.lstBlockSprites[ii][jj];
                 sprite.visible = false;
+                sprite.alpha = 1;
             }
         }
     }

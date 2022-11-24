@@ -22,6 +22,8 @@ export default class LogicMgr {
         this.bRefresh = false;
         this.iScore = 0;
         this.iLevel = 0;
+
+        this.lstListener = [];
     }
 
     start() {
@@ -72,6 +74,8 @@ export default class LogicMgr {
 
         if (!this.curShape.fall()) {
             // 不能下落则放置并判断是否失败
+            this.dispatchEvent('drop');
+
             if (this.curShape.putBoard()) {
                 this.curShape = null;
                 this.bGaming = false;
@@ -80,6 +84,26 @@ export default class LogicMgr {
                 this.checkDestroy();
                 this.nextBlock();
             }
+        }
+
+        this.bRefresh = true;
+    }
+
+    quickDrop() {
+        if (!this.bGaming || this.curShape == null) {
+            return;
+        }
+
+        this.curShape.quickFall();
+        this.dispatchEvent('drop');
+
+        if (this.curShape.putBoard()) {
+            this.curShape = null;
+            this.bGaming = false;
+        }
+        else {
+            this.checkDestroy();
+            this.nextBlock();
         }
 
         this.bRefresh = true;
@@ -104,6 +128,8 @@ export default class LogicMgr {
     }
 
     checkDestroy() {
+        let bdes = false;
+
         for (let ii = 0; ii < this.iRows; ++ii) {
             let bfull = true;
 
@@ -115,6 +141,7 @@ export default class LogicMgr {
             }
 
             if (bfull) {
+                bdes = true;
                 this.lstBoard.splice(ii, 1);
 
                 let lst = [];
@@ -133,6 +160,12 @@ export default class LogicMgr {
         if (this.speed < CFG.LOGIC.MIN_SPEED) {
             this.speed = CFG.LOGIC.MIN_SPEED;
         }
+
+        if (bdes) {
+            this.dispatchEvent('destroy');
+        }
+
+        return bdes;
     }
 
     nextBlock() {
@@ -150,9 +183,11 @@ export default class LogicMgr {
 
         data.lst = null;
         data.board = this.lstBoard;
+        data.shadow = null;
 
         if (this.curShape) {
             data.lst = this.curShape.getBlocks();
+            data.shadow = this.curShape.getShadowBlocks();
         }
 
         this.bRefresh = false;
@@ -179,6 +214,17 @@ export default class LogicMgr {
         if (this.stime > this.speed) {
             this.stime -= this.speed;
             this.drop();
+        }
+    }
+
+    addEventListener(func) {
+        this.lstListener.push(func);
+    }
+
+    dispatchEvent(evt) {
+        for (let ii = 0; ii < this.lstListener.length; ++ii) {
+            let func = this.lstListener[ii];
+            func.call(this, evt);
         }
     }
 

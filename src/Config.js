@@ -26,7 +26,8 @@ export const KEY = {
     RIGHT: 'ArrowRight',
     DROP: 'ArrowDown',
     ROTATE: 'ArrowUp',
-    START: ' '
+    START: ' ',
+    QUICKDROP: ' ',
 }
 
 const SHAPE0 = [
@@ -112,6 +113,12 @@ export const LOGIC = {
     CHG_SCORE: 10,
 }
 
+export const SOUND = {
+    KEYDOWN: 'key.mp3',
+    DESTROY: 'destroy.mp3',
+    DROP: 'drop.mp3',
+}
 
 
-export default { DISPLAY, RESOURCE, IMAGE_NAME, KEY, LOGIC };
+
+export default { DISPLAY, RESOURCE, IMAGE_NAME, KEY, LOGIC, SOUND };

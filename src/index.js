@@ -1,4 +1,5 @@
 import { Application, Assets } from 'pixi.js';
+import { sound } from '@pixi/sound';
 
 import CFG from './Config';
 import Game from './Game';
@@ -15,6 +16,10 @@ let game = new Game(app);
 loadResource();
 
 async function loadResource() {
+    for (let item in CFG.SOUND) {
+        sound.add(CFG.SOUND[item], CFG.SOUND[item]);
+    }
+
     await Assets.load(CFG.RESOURCE);
     game.run();
 }
